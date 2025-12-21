@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Helios Admin Console</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body class="p-5">
+    <h1 class="mb-4">Admin Dashboard</h1>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="p-4 rounded dashboard-card">
+                <h3>Active Applications</h3>
+                <p class="display-3">24</p>
+                <small class="text-success">+12% from last week</small>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-4 rounded dashboard-card">
+                <h3>Underwriting Queue</h3>
+                <p class="display-3">8</p>
+                <small class="text-warning">High Load</small>
+            </div>
+        </div>
+    </div>
+    <div class="mt-5">
+        <a href="/" class="btn btn-outline-light">Back to Application</a>
+    </div>
+</body>
+
+</html>
