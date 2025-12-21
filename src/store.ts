@@ -106,3 +106,35 @@ export const prevStep = () => {
 }
 
 export const stepStore = atom<number>(1); // 1 to 10 for the topics
+
+// --- Persistence Bridge ---
+const STORAGE_KEY = 'helios_form_data';
+
+// 1. Save to localStorage whenever store changes
+formStore.subscribe(value => {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+    } catch (e) {
+        // Ignore storage errors
+    }
+});
+
+// 2. Hydrate from localStorage on load (if available)
+try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+        formStore.set({ ...formStore.get(), ...JSON.parse(saved) });
+    }
+} catch (e) { }
+
+// 3. Listen for changes from other tabs
+if (typeof window !== 'undefined') {
+    window.addEventListener('storage', (e) => {
+        if (e.key === STORAGE_KEY && e.newValue) {
+            try {
+                const newData = JSON.parse(e.newValue);
+                formStore.set({ ...formStore.get(), ...newData });
+            } catch (err) { }
+        }
+    });
+}

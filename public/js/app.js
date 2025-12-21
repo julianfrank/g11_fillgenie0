@@ -17275,6 +17275,28 @@ var prevStep = () => {
     stepStore.set(current - 1);
 };
 var stepStore = atom(1);
+var STORAGE_KEY = "helios_form_data";
+formStore.subscribe((value) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+  } catch (e) {}
+});
+try {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    formStore.set({ ...formStore.get(), ...JSON.parse(saved) });
+  }
+} catch (e) {}
+if (typeof window !== "undefined") {
+  window.addEventListener("storage", (e) => {
+    if (e.key === STORAGE_KEY && e.newValue) {
+      try {
+        const newData = JSON.parse(e.newValue);
+        formStore.set({ ...formStore.get(), ...newData });
+      } catch (err) {}
+    }
+  });
+}
 
 // src/components/LoanForm.tsx
 var jsx_dev_runtime = __toESM(require_jsx_dev_runtime(), 1);
@@ -18381,52 +18403,535 @@ var LoanForm = () => {
   }, undefined, true, undefined, this);
 };
 
-// src/index.tsx
+// src/components/AdminConsole.tsx
+var import_react4 = __toESM(require_react(), 1);
 var jsx_dev_runtime2 = __toESM(require_jsx_dev_runtime(), 1);
-var App = () => {
+var DataField = ({ label, value, unit }) => {
+  let displayValue = String(value);
+  let badgeClass = "";
+  if (typeof value === "boolean") {
+    displayValue = value ? "ENABLED" : "DISABLED";
+    badgeClass = value ? "bg-success bg-opacity-10 text-success border-success" : "bg-danger bg-opacity-10 text-danger border-danger";
+  }
   return /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("div", {
-    className: "container py-5",
+    className: "d-flex justify-content-between align-items-center py-2 border-bottom border-white border-opacity-10",
     children: [
-      /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("header", {
-        className: "mb-5 text-center",
+      /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("span", {
+        className: "text-secondary small text-uppercase fw-medium",
+        children: label.replace(/([A-Z])/g, " $1")
+      }, undefined, false, undefined, this),
+      /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("div", {
+        className: "d-flex align-items-center gap-2",
+        children: badgeClass ? /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("span", {
+          className: `badge border ${badgeClass} fw-bold small pb-1 px-2`,
+          children: displayValue
+        }, undefined, false, undefined, this) : /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("span", {
+          className: "font-monospace text-light fw-bold",
+          children: unit && (value !== "" && value !== null) ? `${value}${unit}` : displayValue || "---"
+        }, undefined, false, undefined, this)
+      }, undefined, false, undefined, this)
+    ]
+  }, undefined, true, undefined, this);
+};
+var TopicCard = ({ title, icon, children }) => /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("div", {
+  className: "col-12 col-md-6 col-lg-4",
+  children: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("div", {
+    className: "p-4 h-100 rounded-3",
+    style: { background: "rgba(255, 255, 255, 0.05)", border: "1px solid rgba(255, 255, 255, 0.1)", backdropFilter: "blur(8px)" },
+    children: [
+      /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("div", {
+        className: "d-flex align-items-center gap-2 mb-3 border-bottom border-secondary border-opacity-25 pb-2",
         children: [
-          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("h1", {
-            className: "display-4 fw-bold text-primary mb-2",
-            children: "Helios Capital"
+          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("span", {
+            className: "text-warning",
+            children: icon
           }, undefined, false, undefined, this),
-          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("p", {
-            className: "lead text-light-emphasis",
-            children: "Advanced Photovoltaic Asset Financing Initiation"
+          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("h6", {
+            className: "mb-0 text-uppercase letter-spacing-1 text-primary-emphasis",
+            children: title
           }, undefined, false, undefined, this)
         ]
       }, undefined, true, undefined, this),
-      /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("main", {
-        children: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(LoanForm, {}, undefined, false, undefined, this)
+      children
+    ]
+  }, undefined, true, undefined, this)
+}, undefined, false, undefined, this);
+var AdminConsole = () => {
+  const data = useStore(formStore);
+  const [lastUpdate, setLastUpdate] = import_react4.useState(new Date);
+  import_react4.useEffect(() => {
+    setLastUpdate(new Date);
+  }, [data]);
+  return /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("div", {
+    className: "container-fluid px-4 py-5",
+    style: { minHeight: "100vh", background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)", color: "#f8fafc", fontFamily: "'Outfit', sans-serif" },
+    children: [
+      /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("nav", {
+        className: "navbar navbar-expand-lg py-3 sticky-top rounded-3 mb-4",
+        style: { background: "rgba(15, 23, 42, 0.8)", backdropFilter: "blur(12px)", border: "1px solid rgba(255, 255, 255, 0.1)", zIndex: 1020 },
+        children: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("div", {
+          className: "container-fluid px-4",
+          children: [
+            /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("span", {
+              className: "navbar-brand fw-bold d-flex align-items-center gap-2 m-0",
+              children: [
+                /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("span", {
+                  className: "text-warning",
+                  children: "Helios"
+                }, undefined, false, undefined, this),
+                /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("span", {
+                  className: "text-white border-start border-secondary ps-2 ms-1 fs-6 text-uppercase letter-spacing-2",
+                  children: "Live Underwriting Monitor"
+                }, undefined, false, undefined, this)
+              ]
+            }, undefined, true, undefined, this),
+            /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("div", {
+              className: "d-flex align-items-center gap-4",
+              children: [
+                /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("div", {
+                  className: "d-flex align-items-center text-success small fw-bold letter-spacing-1",
+                  children: [
+                    /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("span", {
+                      className: "d-inline-block rounded-circle me-2 bg-success animate-pulse",
+                      style: { width: 8, height: 8, boxShadow: "0 0 10px rgba(74, 222, 128, 0.8)" }
+                    }, undefined, false, undefined, this),
+                    "SYNC ACTIVE"
+                  ]
+                }, undefined, true, undefined, this),
+                /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("div", {
+                  className: "text-muted small d-none d-md-block",
+                  children: [
+                    "Last Packet: ",
+                    /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("span", {
+                      className: "text-light",
+                      children: lastUpdate.toLocaleTimeString()
+                    }, undefined, false, undefined, this)
+                  ]
+                }, undefined, true, undefined, this),
+                /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("a", {
+                  href: "./index.html",
+                  className: "btn btn-sm btn-outline-warning px-3 rounded-pill text-uppercase small fw-bold",
+                  children: "Open Form →"
+                }, undefined, false, undefined, this)
+              ]
+            }, undefined, true, undefined, this)
+          ]
+        }, undefined, true, undefined, this)
       }, undefined, false, undefined, this),
-      /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("footer", {
+      /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("div", {
+        className: "row g-4",
+        children: [
+          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(TopicCard, {
+            title: "1. PPA & Jurisdiction",
+            icon: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("svg", {
+              width: "16",
+              height: "16",
+              fill: "currentColor",
+              className: "bi bi-geo-alt",
+              viewBox: "0 0 16 16",
+              children: [
+                /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("path", {
+                  d: "M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"
+                }, undefined, false, undefined, this),
+                /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("path", {
+                  d: "M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
+                }, undefined, false, undefined, this)
+              ]
+            }, undefined, true, undefined, this),
+            children: [
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "PPA Zone",
+                value: data.ppaZone
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Grid Congestion",
+                value: data.gridCongestionLevel,
+                unit: " bps"
+              }, undefined, false, undefined, this)
+            ]
+          }, undefined, true, undefined, this),
+          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(TopicCard, {
+            title: "2. Irradiance Profiles",
+            icon: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("svg", {
+              width: "16",
+              height: "16",
+              fill: "currentColor",
+              className: "bi bi-sun",
+              viewBox: "0 0 16 16",
+              children: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("path", {
+                d: "M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zM8 4.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zM8 11.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zM3.536 3.536a.5.5 0 0 1 .707 0l1.414 1.414a.5.5 0 0 1-.707.707L3.536 4.243a.5.5 0 0 1 0-.707zm9.192 9.192a.5.5 0 0 1 .707 0l1.414 1.414a.5.5 0 0 1-.707.707l-1.414-1.414a.5.5 0 0 1 0-.707zM3.536 12.464a.5.5 0 0 1 .707 0l1.414-1.414a.5.5 0 0 1-.707-.707L3.536 11.757a.5.5 0 0 1 0 .707zm9.192-9.192a.5.5 0 0 1 .707 0l1.414-1.414a.5.5 0 0 1-.707-.707l-1.414 1.414a.5.5 0 0 1 0 .707z"
+              }, undefined, false, undefined, this)
+            }, undefined, false, undefined, this),
+            children: [
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "GHI",
+                value: data.globalHorizontalIrradiance,
+                unit: " kWh/m²"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "DHI",
+                value: data.diffuseHorizontalIrradiance,
+                unit: " kWh/m²"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Shading Coef",
+                value: data.shadingCoef
+              }, undefined, false, undefined, this)
+            ]
+          }, undefined, true, undefined, this),
+          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(TopicCard, {
+            title: "3. PV Specifications",
+            icon: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("svg", {
+              width: "16",
+              height: "16",
+              fill: "currentColor",
+              className: "bi bi-grid-3x3",
+              viewBox: "0 0 16 16",
+              children: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("path", {
+                d: "M0 1.5A1.5 1.5 0 0 1 1.5 0h13A1.5 1.5 0 0 1 16 1.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13zM1.5 1a.5.5 0 0 0-.5.5V5h4V1H1.5zM5 6H1v4h4V6zm1 4h4V6H6v4zm-1 1H1v3.5a.5.5 0 0 0 .5.5H5v-4zm1 0v4h4v-4H6zm5 0v4h3.5a.5.5 0 0 0 .5-.5V11h-4zm0-1h4V6h-4v4zm0-5h4V1.5a.5.5 0 0 0-.5-.5H11v4zm-1 0V1H6v4h4z"
+              }, undefined, false, undefined, this)
+            }, undefined, false, undefined, this),
+            children: [
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Efficiency",
+                value: data.moduleEfficiency
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Topology",
+                value: data.inverterTopology
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Bifacial Gain",
+                value: data.bifacialGain
+              }, undefined, false, undefined, this)
+            ]
+          }, undefined, true, undefined, this),
+          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(TopicCard, {
+            title: "4. ESS Integration",
+            icon: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("svg", {
+              width: "16",
+              height: "16",
+              fill: "currentColor",
+              className: "bi bi-battery-charging",
+              viewBox: "0 0 16 16",
+              children: [
+                /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("path", {
+                  d: "M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z"
+                }, undefined, false, undefined, this),
+                /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("path", {
+                  d: "M2 6h10v4H2V6zm10-1a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h10z"
+                }, undefined, false, undefined, this),
+                /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("path", {
+                  d: "M13 7v2a1 1 0 0 0 1 1h.5a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5H14a1 1 0 0 0-1 1z"
+                }, undefined, false, undefined, this)
+              ]
+            }, undefined, true, undefined, this),
+            children: [
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Capacity",
+                value: data.storageCapacityKwh,
+                unit: " kWh"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "DoD",
+                value: data.depthOfDischarge,
+                unit: "%"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Cycle Life",
+                value: data.cycleLife
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Chemistry",
+                value: data.batteryChemistry
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "RTE",
+                value: data.roundTripEfficiency,
+                unit: "%"
+              }, undefined, false, undefined, this)
+            ]
+          }, undefined, true, undefined, this),
+          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(TopicCard, {
+            title: "5. Interconnection",
+            icon: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("svg", {
+              width: "16",
+              height: "16",
+              fill: "currentColor",
+              className: "bi bi-lightning",
+              viewBox: "0 0 16 16",
+              children: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("path", {
+                d: "M5.52.359A.5.5 0 0 1 6 0h4a.5.5 0 0 1 .474.658L8.694 6H12.5a.5.5 0 0 1 .395.807l-7 9a.5.5 0 0 1-.873-.454L6.823 9.5H3.5a.5.5 0 0 1-.48-.641l2.5-8.5zM6.374 1 4.168 8.5H7.5a.5.5 0 0 1 .478.647L6.78 13.04 11.478 7H8a.5.5 0 0 1-.474-.658L9.306 1H6.374z"
+              }, undefined, false, undefined, this)
+            }, undefined, false, undefined, this),
+            children: [
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "PCC Voltage",
+                value: data.pccVoltage,
+                unit: "V"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Impedance",
+                value: data.transformerImpedance,
+                unit: "%"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Export Limit",
+                value: data.exportLimitKw,
+                unit: " kW"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "NEM Eligible",
+                value: data.netMeteringCap
+              }, undefined, false, undefined, this)
+            ]
+          }, undefined, true, undefined, this),
+          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(TopicCard, {
+            title: "6. Structural",
+            icon: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("svg", {
+              width: "16",
+              height: "16",
+              fill: "currentColor",
+              className: "bi bi-building",
+              viewBox: "0 0 16 16",
+              children: [
+                /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("path", {
+                  d: "M4 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm5 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm-5 2a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm5 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0z"
+                }, undefined, false, undefined, this),
+                /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("path", {
+                  d: "M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V1zm11 0H3v14h3v-2h4v2h3V1z"
+                }, undefined, false, undefined, this)
+              ]
+            }, undefined, true, undefined, this),
+            children: [
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Roof Pitch",
+                value: data.roofPitchDegrees,
+                unit: "°"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Rafter Spacing",
+                value: data.rafterSpacing,
+                unit: " in"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Wind Uplift",
+                value: data.windUpliftResistance,
+                unit: " psf"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Seismic Zone",
+                value: data.seismicRiskZone
+              }, undefined, false, undefined, this)
+            ]
+          }, undefined, true, undefined, this),
+          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(TopicCard, {
+            title: "7. Financials",
+            icon: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("svg", {
+              width: "16",
+              height: "16",
+              fill: "currentColor",
+              className: "bi bi-currency-dollar",
+              viewBox: "0 0 16 16",
+              children: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("path", {
+                d: "M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.444h-.2zm1.242.827c1.144.298 1.702.894 1.702 1.742 0 1.053-.782 1.828-2.046 1.938V6.151l.344.093z"
+              }, undefined, false, undefined, this)
+            }, undefined, false, undefined, this),
+            children: [
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "WACC",
+                value: data.wacc,
+                unit: "%"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "IRR Target",
+                value: data.irrTarget,
+                unit: "%"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Balloon Payment",
+                value: data.balloonPayment,
+                unit: " $"
+              }, undefined, false, undefined, this)
+            ]
+          }, undefined, true, undefined, this),
+          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(TopicCard, {
+            title: "8. Tax & Incentives",
+            icon: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("svg", {
+              width: "16",
+              height: "16",
+              fill: "currentColor",
+              className: "bi bi-percent",
+              viewBox: "0 0 16 16",
+              children: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("path", {
+                d: "M13.442 2.558a.625.625 0 0 1 0 .884l-10 10a.625.625 0 1 1-.884-.884l10-10a.625.625 0 0 1 .884 0zM4.5 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm7 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"
+              }, undefined, false, undefined, this)
+            }, undefined, false, undefined, this),
+            children: [
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "ITC Percentage",
+                value: data.itcPercentage,
+                unit: "%"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Depreciation",
+                value: data.depreciationSchedule
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "SREC Value",
+                value: data.srecValue,
+                unit: " $/MWh"
+              }, undefined, false, undefined, this)
+            ]
+          }, undefined, true, undefined, this),
+          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(TopicCard, {
+            title: "9. SCADA & Telemetry",
+            icon: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("svg", {
+              width: "16",
+              height: "16",
+              fill: "currentColor",
+              className: "bi bi-broadcast",
+              viewBox: "0 0 16 16",
+              children: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("path", {
+                d: "M3.05 3.05a7 7 0 0 0 0 9.9.5.5 0 0 1-.707.707 8 8 0 0 1 0-11.314.5.5 0 0 1 .707.707zm2.122 2.122a4 4 0 0 0 0 5.656.5.5 0 1 1-.708.708 5 5 0 0 1 0-7.072.5.5 0 0 1 .708.708zm5.656 0a4 4 0 0 0 0 5.656.5.5 0 0 1-.708-.708 5 5 0 0 1 0-7.072.5.5 0 0 1 .708.708zm2.122-2.122a7 7 0 0 0 0 9.9.5.5 0 0 1-.707-.707 8 8 0 0 1 0-11.314.5.5 0 0 1 .707.707zM10 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"
+              }, undefined, false, undefined, this)
+            }, undefined, false, undefined, this),
+            children: [
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "API Protocol",
+                value: data.apiHandshakeProtocol
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Polling Freq",
+                value: data.dataAcquisitionIntervalSeconds,
+                unit: "s"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Pyranometer",
+                value: data.pyranometerClass
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Weather Station",
+                value: data.weatherStationRequired
+              }, undefined, false, undefined, this)
+            ]
+          }, undefined, true, undefined, this),
+          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(TopicCard, {
+            title: "10. O&M Service",
+            icon: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("svg", {
+              width: "16",
+              height: "16",
+              fill: "currentColor",
+              className: "bi bi-tools",
+              viewBox: "0 0 16 16",
+              children: /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("path", {
+                d: "M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.27 3.27a.997.997 0 0 0 1.414 0l1.586-1.586a.997.997 0 0 0 0-1.414l-3.27-3.27a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3c0-1.657-1.343-3-3-3-.317 0-.617.05-.897.142L9.46 2.761l-.221-.221a.5.5 0 0 0-.707 0l-.822.822a.5.5 0 0 0 0 .707l.221.221-2.924 2.923L3.69 5.341a1 1 0 0 0-.584-.216H3.05A1 1 0 0 0 2.1 4.505l-2.1-3.1h1zM11.5 2c.276 0 .5.224.5.5s-.224.5-.5.5-.5-.224-.5-.5.224-.5.5-.5z"
+              }, undefined, false, undefined, this)
+            }, undefined, false, undefined, this),
+            children: [
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "PM Interval",
+                value: data.preventativeMaintenanceIntervalMonths,
+                unit: " mo"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Washing Freq",
+                value: data.moduleCleaningFrequency,
+                unit: " /yr"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV(DataField, {
+                label: "Inverter Reserve",
+                value: data.inverterReplacementReserve,
+                unit: " $/kW"
+              }, undefined, false, undefined, this)
+            ]
+          }, undefined, true, undefined, this)
+        ]
+      }, undefined, true, undefined, this),
+      /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("style", {
+        children: `
+                @keyframes pulse {
+                    0% { opacity: 1; transform: scale(1); }
+                    50% { opacity: 0.5; transform: scale(1.2); }
+                    100% { opacity: 1; transform: scale(1); }
+                }
+                .animate-pulse {
+                    animation: pulse 2s infinite ease-in-out;
+                }
+                .letter-spacing-1 { letter-spacing: 1px; }
+                .letter-spacing-2 { letter-spacing: 2px; }
+            `
+      }, undefined, false, undefined, this)
+    ]
+  }, undefined, true, undefined, this);
+};
+
+// src/index.tsx
+var jsx_dev_runtime3 = __toESM(require_jsx_dev_runtime(), 1);
+var rootElement = document.getElementById("root");
+if (!rootElement)
+  throw new Error("Root element not found");
+var root = import_client.createRoot(rootElement);
+var isPage = (name) => window.location.pathname.endsWith(name);
+if (isPage("admin.html")) {
+  root.render(/* @__PURE__ */ jsx_dev_runtime3.jsxDEV(AdminConsole, {}, undefined, false, undefined, this));
+} else {
+  root.render(/* @__PURE__ */ jsx_dev_runtime3.jsxDEV("div", {
+    className: "container py-5",
+    children: [
+      /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("header", {
+        className: "mb-5 text-center",
+        children: [
+          /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("h1", {
+            className: "display-4 fw-bold text-primary mb-2 letter-spacing-2",
+            children: "HELIOS CAPITAL"
+          }, undefined, false, undefined, this),
+          /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("p", {
+            className: "lead text-light-emphasis letter-spacing-1 text-uppercase small",
+            children: "Advanced Photovoltaic Asset Financing Initiation"
+          }, undefined, false, undefined, this),
+          /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("div", {
+            className: "d-flex justify-content-center gap-3 mt-3",
+            children: [
+              /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("span", {
+                className: "badge bg-secondary bg-opacity-25 text-light fw-normal px-3 py-2 border border-secondary border-opacity-50",
+                children: "Series G Funding"
+              }, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("span", {
+                className: "badge bg-secondary bg-opacity-25 text-light fw-normal px-3 py-2 border border-secondary border-opacity-50",
+                children: "Institutional Only"
+              }, undefined, false, undefined, this)
+            ]
+          }, undefined, true, undefined, this)
+        ]
+      }, undefined, true, undefined, this),
+      /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("main", {
+        children: /* @__PURE__ */ jsx_dev_runtime3.jsxDEV(LoanForm, {}, undefined, false, undefined, this)
+      }, undefined, false, undefined, this),
+      /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("footer", {
         className: "mt-5 text-center text-muted small",
         children: [
-          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("p", {
+          /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("p", {
             children: [
               "Helios Capital © 2024. All rights reserved. ",
-              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("br", {}, undefined, false, undefined, this),
+              /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("br", {}, undefined, false, undefined, this),
               " Access restricted to authorized underwriting personnel."
             ]
           }, undefined, true, undefined, this),
-          /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("div", {
+          /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("div", {
             className: "mt-2",
             children: [
-              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("a", {
+              /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("a", {
                 href: "./admin.html",
                 className: "text-decoration-none me-3 text-secondary",
                 children: "Admin Console"
               }, undefined, false, undefined, this),
-              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("a", {
+              /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("a", {
                 href: "./help.html",
                 className: "text-decoration-none me-3 text-secondary",
                 children: "Documentation"
               }, undefined, false, undefined, this),
-              /* @__PURE__ */ jsx_dev_runtime2.jsxDEV("a", {
+              /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("a", {
                 href: "./tech.html",
                 className: "text-decoration-none text-secondary",
                 children: "System Arch"
@@ -18436,10 +18941,5 @@ var App = () => {
         ]
       }, undefined, true, undefined, this)
     ]
-  }, undefined, true, undefined, this);
-};
-var rootId = document.getElementById("root");
-if (rootId) {
-  const root = import_client.createRoot(rootId);
-  root.render(/* @__PURE__ */ jsx_dev_runtime2.jsxDEV(App, {}, undefined, false, undefined, this));
+  }, undefined, true, undefined, this));
 }
