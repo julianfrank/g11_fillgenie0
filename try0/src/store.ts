@@ -1,4 +1,4 @@
-import { map } from 'nanostores';
+import { map, atom } from 'nanostores';
 
 export type FormState = {
     // Topic 1: PPA Availability
@@ -19,16 +19,21 @@ export type FormState = {
     storageCapacityKwh: number;
     depthOfDischarge: number;
     cycleLife: number;
+    batteryChemistry: 'LFP' | 'NMC' | 'Flow';
+    roundTripEfficiency: number;
 
     // Topic 5: Interconnection
     interconnectionAgreementStatus: string;
     netMeteringCap: boolean;
     exportLimitKw: number;
+    pccVoltage: number;
+    transformerImpedance: number;
 
     // Topic 6: Structural
     roofPitchDegrees: number;
     rafterSpacing: number;
     windUpliftResistance: number;
+    seismicRiskZone: string;
 
     // Topic 7: Financial
     irrTarget: number;
@@ -44,6 +49,7 @@ export type FormState = {
     dataAcquisitionIntervalSeconds: number;
     weatherStationRequired: boolean;
     pyranometerClass: string;
+    apiHandshakeProtocol: 'REST' | 'SOAP' | 'GraphQL';
 
     // Topic 10: O&M
     preventativeMaintenanceIntervalMonths: number;
@@ -63,12 +69,17 @@ export const formStore = map<FormState>({
     storageCapacityKwh: 0,
     depthOfDischarge: 0,
     cycleLife: 0,
+    batteryChemistry: 'LFP',
+    roundTripEfficiency: 92.5,
     interconnectionAgreementStatus: '',
     netMeteringCap: false,
     exportLimitKw: 0,
+    pccVoltage: 480,
+    transformerImpedance: 5.5,
     roofPitchDegrees: 0,
     rafterSpacing: 0,
     windUpliftResistance: 0,
+    seismicRiskZone: 'D',
     irrTarget: 0,
     wacc: 0,
     balloonPayment: 0,
@@ -78,6 +89,7 @@ export const formStore = map<FormState>({
     dataAcquisitionIntervalSeconds: 300,
     weatherStationRequired: false,
     pyranometerClass: 'Secondary Standard',
+    apiHandshakeProtocol: 'REST',
     preventativeMaintenanceIntervalMonths: 12,
     moduleCleaningFrequency: 2,
     inverterReplacementReserve: 0
@@ -93,4 +105,4 @@ export const prevStep = () => {
     if (current > 1) stepStore.set(current - 1);
 }
 
-export const stepStore = map<number>(1); // 1 to 10 for the topics
+export const stepStore = atom<number>(1); // 1 to 10 for the topics
