@@ -1,0 +1,21 @@
+{
+    "name": "solar-loan-app",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "bun run --hot server.ts",
+        "build": "bun run build.ts"
+    },
+    "dependencies": {
+        "hono": "^4.0.0",
+        "nanostores": "^1.1.0",
+        "@nanostores/react": "^1.0.0",
+        "react": "^19.2.3",
+        "react-dom": "^19.2.3"
+    },
+    "devDependencies": {
+        "bun-types": "latest",
+        "@types/react": "^19.2.7",
+        "@types/react-dom": "^19.2.3"
+    }
+}
