@@ -17,9 +17,9 @@ const App = () => {
             <footer className="mt-5 text-center text-muted small">
                 <p>Helios Capital &copy; 2024. All rights reserved. <br /> Access restricted to authorized underwriting personnel.</p>
                 <div className="mt-2">
-                    <a href={`${window.location.hostname === 'julianfrank.github.io' ? '/g11_fillgenie0/' : '/'}admin.html`} className="text-decoration-none me-3 text-secondary">Admin Console</a>
-                    <a href={`${window.location.hostname === 'julianfrank.github.io' ? '/g11_fillgenie0/' : '/'}help.html`} className="text-decoration-none me-3 text-secondary">Documentation</a>
-                    <a href={`${window.location.hostname === 'julianfrank.github.io' ? '/g11_fillgenie0/' : '/'}tech.html`} className="text-decoration-none text-secondary">System Arch</a>
+                    <a href="./admin.html" className="text-decoration-none me-3 text-secondary">Admin Console</a>
+                    <a href="./help.html" className="text-decoration-none me-3 text-secondary">Documentation</a>
+                    <a href="./tech.html" className="text-decoration-none text-secondary">System Arch</a>
                 </div>
             </footer>
         </div>
