@@ -24,11 +24,12 @@ jobs:
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
-      - name: Change to try0
-        run: cd try0
+
       - name: Install Dependencies
+        working-directory: try0
         run: bun install
       - name: Build
+        working-directory: try0
         run: bun run build
       - name: Setup Pages
         uses: actions/configure-pages@v4
