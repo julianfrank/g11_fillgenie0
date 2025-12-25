@@ -1,6 +1,8 @@
 import React from 'react';
 import { useStore } from '@nanostores/react';
 import { formStore, stepStore, nextStep, prevStep } from '../store';
+import { ConvAI } from './ConvAI';
+
 
 const SliderInput = ({ label, value, min, max, step = 1, unit = '', onChange, title }: {
     label: string,
@@ -462,6 +464,7 @@ export const LoanForm = () => {
 
     return (
         <div className="card bg-transparent border-0">
+            <ConvAI />
             <div className="card-header bg-transparent border-0 pb-0">
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <span className="badge bg-primary text-dark rounded-pill px-3">Step {step} of 10</span>
@@ -478,6 +481,7 @@ export const LoanForm = () => {
                 <button className="btn btn-outline-secondary px-4" onClick={prevStep} disabled={step === 1}>Previous</button>
                 {step < 10 && <button className="btn btn-primary px-4" onClick={nextStep}>Next</button>}
             </div>
+
         </div>
     );
 };
