@@ -18192,12 +18192,12 @@ var LoanForm = () => {
             className: "btn btn-outline-secondary px-4",
             onClick: prevStep,
             disabled: step === 1,
-            children: "Previous Protocol"
+            children: "Previous"
           }, undefined, false, undefined, this),
           step < 10 && /* @__PURE__ */ jsx_dev_runtime.jsxDEV("button", {
             className: "btn btn-primary px-4",
             onClick: nextStep,
-            children: "Next Vector"
+            children: "Next"
           }, undefined, false, undefined, this)
         ]
       }, undefined, true, undefined, this)
@@ -18686,40 +18686,12 @@ if (isPage("admin.html")) {
         children: [
           /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("h1", {
             className: "display-4 fw-bold text-primary mb-2 letter-spacing-2",
-            children: "HELIOS CAPITAL"
+            children: "Demo Form"
           }, undefined, false, undefined, this),
           /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("p", {
             className: "lead text-light-emphasis letter-spacing-1 text-uppercase small",
-            children: "Advanced Photovoltaic Asset Financing Initiation"
+            children: "Complex Form Demo"
           }, undefined, false, undefined, this),
-          /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("div", {
-            className: "d-flex justify-content-center gap-3 mt-3",
-            children: [
-              /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("span", {
-                className: "badge bg-secondary bg-opacity-25 text-light fw-normal px-3 py-2 border border-secondary border-opacity-50",
-                children: "Series G Funding"
-              }, undefined, false, undefined, this),
-              /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("span", {
-                className: "badge bg-secondary bg-opacity-25 text-light fw-normal px-3 py-2 border border-secondary border-opacity-50",
-                children: "Institutional Only"
-              }, undefined, false, undefined, this)
-            ]
-          }, undefined, true, undefined, this)
-        ]
-      }, undefined, true, undefined, this),
-      /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("main", {
-        children: /* @__PURE__ */ jsx_dev_runtime3.jsxDEV(LoanForm, {}, undefined, false, undefined, this)
-      }, undefined, false, undefined, this),
-      /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("footer", {
-        className: "mt-5 text-center text-muted small",
-        children: [
-          /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("p", {
-            children: [
-              "Helios Capital © 2024. All rights reserved. ",
-              /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("br", {}, undefined, false, undefined, this),
-              " Access restricted to authorized underwriting personnel."
-            ]
-          }, undefined, true, undefined, this),
           /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("div", {
             className: "mt-2",
             children: [
@@ -18741,7 +18713,16 @@ if (isPage("admin.html")) {
             ]
           }, undefined, true, undefined, this)
         ]
-      }, undefined, true, undefined, this)
+      }, undefined, true, undefined, this),
+      /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("main", {
+        children: /* @__PURE__ */ jsx_dev_runtime3.jsxDEV(LoanForm, {}, undefined, false, undefined, this)
+      }, undefined, false, undefined, this),
+      /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("footer", {
+        className: "mt-5 text-center text-muted small",
+        children: /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("p", {
+          children: "Julian Frank © 2026. All rights reserved."
+        }, undefined, false, undefined, this)
+      }, undefined, false, undefined, this)
     ]
   }, undefined, true, undefined, this));
 }

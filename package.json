@@ -7,9 +7,10 @@
         "build": "bun run build.ts"
     },
     "dependencies": {
-        "hono": "4.11.1",
-        "nanostores": "1.1.0",
+        "@elevenlabs/react": "0.12.3",
         "@nanostores/react": "1.0.0",
+        "hono": "4.11.2",
+        "nanostores": "1.1.0",
         "react": "19.2.3",
         "react-dom": "19.2.3"
     },

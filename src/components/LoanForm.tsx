@@ -475,8 +475,8 @@ export const LoanForm = () => {
                 {renderStep()}
             </div>
             <div className="card-footer bg-transparent border-0 d-flex justify-content-between mt-4">
-                <button className="btn btn-outline-secondary px-4" onClick={prevStep} disabled={step === 1}>Previous Protocol</button>
-                {step < 10 && <button className="btn btn-primary px-4" onClick={nextStep}>Next Vector</button>}
+                <button className="btn btn-outline-secondary px-4" onClick={prevStep} disabled={step === 1}>Previous</button>
+                {step < 10 && <button className="btn btn-primary px-4" onClick={nextStep}>Next</button>}
             </div>
         </div>
     );
