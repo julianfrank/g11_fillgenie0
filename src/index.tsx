@@ -34,7 +34,7 @@ if (isPage('admin.html')) {
             <footer className="mt-5 text-center text-muted small">
 
 
-                <p>Julian Frank &copy; 2026. All rights reserved.</p>
+                <p>Julian Frank &copy; 2026. Some rights reserved 😉</p>
             </footer>
         </div>
     );

@@ -18720,7 +18720,7 @@ if (isPage("admin.html")) {
       /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("footer", {
         className: "mt-5 text-center text-muted small",
         children: /* @__PURE__ */ jsx_dev_runtime3.jsxDEV("p", {
-          children: "Julian Frank © 2026. All rights reserved."
+          children: "Julian Frank © 2026. Some rights reserved \uD83D\uDE09"
         }, undefined, false, undefined, this)
       }, undefined, false, undefined, this)
     ]
